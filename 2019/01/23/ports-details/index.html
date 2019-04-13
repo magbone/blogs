@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-cn">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="端口对照表    关键字 端口 描述      0/tcp 保留    0/udp 保留   #  Jon Postel    tcpmux 1/tcp TCP 端口服务多路器   tcpmux 1/udp TCP 端口服务多路器   #  Mark Lottor    compressnet 2/tcp 管理功能   compressnet 2/udp 管理功能   compressnet 3/">
+<meta name="keywords" content="资料">
+<meta property="og:type" content="article">
+<meta property="og:title" content="端口对照表">
+<meta property="og:url" content="https://i.xhi.io/2019/01/23/ports-details/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="端口对照表    关键字 端口 描述      0/tcp 保留    0/udp 保留   #  Jon Postel    tcpmux 1/tcp TCP 端口服务多路器   tcpmux 1/udp TCP 端口服务多路器   #  Mark Lottor    compressnet 2/tcp 管理功能   compressnet 2/udp 管理功能   compressnet 3/">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-04-13T04:50:02.090Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="端口对照表">
+<meta name="twitter:description" content="端口对照表    关键字 端口 描述      0/tcp 保留    0/udp 保留   #  Jon Postel    tcpmux 1/tcp TCP 端口服务多路器   tcpmux 1/udp TCP 端口服务多路器   #  Mark Lottor    compressnet 2/tcp 管理功能   compressnet 2/udp 管理功能   compressnet 3/">
+
+
+
+
+
+
+  <link rel="canonical" href="https://i.xhi.io/2019/01/23/ports-details/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>端口对照表 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+ 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://i.xhi.io/2019/01/23/ports-details/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magbone">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">端口对照表
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-01-23 10:02:28" itemprop="dateCreated datePublished" datetime="2019-01-23T10:02:28+08:00">2019-01-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-04-13 12:50:02" itemprop="dateModified" datetime="2019-04-13T12:50:02+08:00">2019-04-13</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="端口对照表"><a href="#端口对照表" class="headerlink" title="端口对照表"></a>端口对照表</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>端口</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>0/tcp</td>
+<td>保留</td>
+</tr>
+<tr>
+<td></td>
+<td>0/udp</td>
+<td>保留</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Jon Postel <postel#isi.edu></postel#isi.edu></td>
+</tr>
+<tr>
+<td>tcpmux</td>
+<td>1/tcp</td>
+<td>TCP 端口服务多路器</td>
+</tr>
+<tr>
+<td>tcpmux</td>
+<td>1/udp</td>
+<td>TCP 端口服务多路器</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Mark Lottor <mkl#nisc.sri.com></mkl#nisc.sri.com></td>
+</tr>
+<tr>
+<td>compressnet</td>
+<td>2/tcp</td>
+<td>管理功能</td>
+</tr>
+<tr>
+<td>compressnet</td>
+<td>2/udp</td>
+<td>管理功能</td>
+</tr>
+<tr>
+<td>compressnet</td>
+<td>3/tcp</td>
+<td>压缩进程</td>
+</tr>
+<tr>
+<td>compressnet</td>
+<td>3/udp</td>
+<td>压缩进程</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Bernie Volz <volz#process.com></volz#process.com></td>
+</tr>
+<tr>
+<td>#</td>
+<td>4/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>4/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>rje</td>
+<td>5/tcp</td>
+<td>远程工作入口</td>
+</tr>
+<tr>
+<td>rje</td>
+<td>5/udp</td>
+<td>远程工作入口</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Jon Postel <postel#isi.edu></postel#isi.edu></td>
+</tr>
+<tr>
+<td>#</td>
+<td>6/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>6/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>echo</td>
+<td>7/tcp</td>
+<td>检测有无消息</td>
+</tr>
+<tr>
+<td>echo</td>
+<td>7/udp</td>
+<td>检测有无消息</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Jon Postel <postel#isi.edu></postel#isi.edu></td>
+</tr>
+<tr>
+<td>#</td>
+<td>8/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>8/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>discard</td>
+<td>9/tcp</td>
+<td>弃用</td>
+</tr>
+<tr>
+<td>discard</td>
+<td>9/udp</td>
+<td>弃用</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Jon Postel <postel#isi.edu></postel#isi.edu></td>
+</tr>
+<tr>
+<td>#</td>
+<td>10/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>10/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>systat</td>
+<td>11/tcp</td>
+<td>活动用户</td>
+</tr>
+<tr>
+<td>systat</td>
+<td>11/udp</td>
+<td>活动用户</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Jon Postel <postel#isi.edu></postel#isi.edu></td>
+</tr>
+<tr>
+<td>#</td>
+<td>12/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>12/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>daytime</td>
+<td>13/tcp</td>
+<td><a href="https://baike.baidu.com/item/DAYTIME%E5%8D%8F%E8%AE%AE/11049479" target="_blank" rel="noopener">Daytime</a></td>
+</tr>
+<tr>
+<td>daytime</td>
+<td>13/udp</td>
+<td><a href="https://baike.baidu.com/item/DAYTIME%E5%8D%8F%E8%AE%AE/11049479" target="_blank" rel="noopener">Daytime</a></td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Jon Postel <postel#isi.edu></postel#isi.edu></td>
+</tr>
+<tr>
+<td>#</td>
+<td>14/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>14/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>15/tcp</td>
+<td>未分配 [was netstat]</td>
+</tr>
+<tr>
+<td>#</td>
+<td>15/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>16/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>16/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>qotd</td>
+<td>17/tcp</td>
+<td><a href="https://en.wikipedia.org/wiki/QOTD" target="_blank" rel="noopener">Quote of the Day</a></td>
+</tr>
+<tr>
+<td>qotd</td>
+<td>17/udp</td>
+<td><a href="https://en.wikipedia.org/wiki/QOTD" target="_blank" rel="noopener">Quote of the Day</a></td>
+</tr>
+<tr>
+<td>#</td>
+<td>Jon Postel <postel#isi.edu></postel#isi.edu></td>
+</tr>
+<tr>
+<td>msp</td>
+<td>18/tcp</td>
+<td>消息发送协议</td>
+</tr>
+<tr>
+<td>msp</td>
+<td>18/udp</td>
+<td>消息发送协议</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Rina Nethaniel &lt;—-none—-&gt;</td>
+</tr>
+<tr>
+<td>chargen</td>
+<td>19/tcp</td>
+<td>字符发生器</td>
+</tr>
+<tr>
+<td>chargen</td>
+<td>19/udp</td>
+<td>字符发生器</td>
+</tr>
+<tr>
+<td>ftp-data</td>
+<td>20/tcp</td>
+<td>FTP数据传输 [Default Data]</td>
+</tr>
+<tr>
+<td>ftp-data</td>
+<td>20/udp</td>
+<td>FTP数据传输 [Default Data]</td>
+</tr>
+<tr>
+<td>ftp</td>
+<td>21/tcp</td>
+<td>FTP数据传输 [Control]</td>
+</tr>
+<tr>
+<td>ftp</td>
+<td>21/udp</td>
+<td>FTP数据传输 [Control]</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Jon Postel <postel#isi.edu></postel#isi.edu></td>
+</tr>
+<tr>
+<td>#</td>
+<td>22/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>22/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>telnet</td>
+<td>23/tcp</td>
+<td>Telnet</td>
+</tr>
+<tr>
+<td>telnet</td>
+<td>23/udp</td>
+<td>Telnet</td>
+</tr>
+<tr>
+<td>#</td>
+<td>Jon Postel <postel#isi.edu></postel#isi.edu></td>
+</tr>
+<tr>
+<td></td>
+<td>24/tcp</td>
+<td>任何私有邮件系统</td>
+</tr>
+<tr>
+<td></td>
+<td>24/udp</td>
+<td>任何私有邮件系统</td>
+</tr>
+<tr>
+<td>#</td>
+<td>Rick Adam <rick#uunet.uu.net></rick#uunet.uu.net></td>
+</tr>
+<tr>
+<td>smtp</td>
+<td>25/tcp</td>
+<td>Simple Mail Transfer</td>
+</tr>
+<tr>
+<td>smtp</td>
+<td>25/udp</td>
+<td>Simple Mail Transfer</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Jon Postel <postel#isi.edu></postel#isi.edu></td>
+</tr>
+<tr>
+<td>#</td>
+<td>26/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>26/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>nsw-fe</td>
+<td>27/tcp</td>
+<td>NSW User System FE</td>
+</tr>
+<tr>
+<td>nsw-fe</td>
+<td>27/udp</td>
+<td>NSW User System FE</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Robert Thomas <bthomas#f.bbn.com></bthomas#f.bbn.com></td>
+</tr>
+<tr>
+<td>#</td>
+<td>28/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>28/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>msg-icp</td>
+<td>29/tcp</td>
+<td>MSG ICP</td>
+</tr>
+<tr>
+<td>msg-icp</td>
+<td>29/udp</td>
+<td><a href="https://www.auditmypc.com/udp-port-29.asp" target="_blank" rel="noopener">MSG</a> <a href="https://en.wikipedia.org/wiki/Internet_Cache_Protocol" target="_blank" rel="noopener">ICP</a></td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Robert Thomas <bthomas#f.bbn.com></bthomas#f.bbn.com></td>
+</tr>
+<tr>
+<td>#</td>
+<td>30/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>30/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>msg-auth</td>
+<td>31/tcp</td>
+<td><a href="https://en.wikipedia.org/wiki/Message_authentication" target="_blank" rel="noopener">MSG Authentication</a></td>
+</tr>
+<tr>
+<td>msg-auth</td>
+<td>31/udp</td>
+<td>MSG Authentication</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Robert Thomas <bthomas#f.bbn.com></bthomas#f.bbn.com></td>
+</tr>
+<tr>
+<td>#</td>
+<td>32/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>32/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>dsp</td>
+<td>33/tcp</td>
+<td>Display Support Protocol</td>
+</tr>
+<tr>
+<td>dsp</td>
+<td>33/udp</td>
+<td>Display Support Protocol</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Ed Cain <cain#edn-unix.dca.mil></cain#edn-unix.dca.mil></td>
+</tr>
+<tr>
+<td>#</td>
+<td>34/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>34/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td></td>
+<td>35/tcp</td>
+<td>any private printer server</td>
+</tr>
+<tr>
+<td></td>
+<td>35/udp</td>
+<td>any private printer server</td>
+</tr>
+<tr>
+<td>#</td>
+<td>Jon Postel <postel#isi.edu></postel#isi.edu></td>
+</tr>
+<tr>
+<td>#</td>
+<td>36/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>36/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>time</td>
+<td>37/tcp</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>time</td>
+<td>37/udp</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Jon Postel <postel#isi.edu></postel#isi.edu></td>
+</tr>
+<tr>
+<td>rap</td>
+<td>38/tcp</td>
+<td>远程连接协议</td>
+</tr>
+<tr>
+<td>rap</td>
+<td>38/udp</td>
+<td>远程连接协议(<a href="https://www.cert.gov.au/sites/g/files/net3281/f/remote_access_protocol.pdf" target="_blank" rel="noopener">Remote Access Protocol</a>)</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Robert Ullmann <ariel#world.std.com></ariel#world.std.com></td>
+</tr>
+<tr>
+<td>rlp</td>
+<td>39/tcp</td>
+<td><a href="https://tools.ietf.org/html/rfc887" target="_blank" rel="noopener">Resource Location Protocol</a></td>
+</tr>
+<tr>
+<td>rlp</td>
+<td>39/udp</td>
+<td>Resource Location Protocol</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Mike Accetta <mike.accetta#cmu-cs-a.edu></mike.accetta#cmu-cs-a.edu></td>
+</tr>
+<tr>
+<td>#</td>
+<td>40/tcp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>#</td>
+<td>40/udp</td>
+<td>未分配</td>
+</tr>
+<tr>
+<td>graphics</td>
+<td>41/tcp</td>
+<td>Graphics</td>
+</tr>
+<tr>
+<td>graphics</td>
+<td>41/udp    Graphics</td>
+</tr>
+<tr>
+<td>nameserver</td>
+<td>42/tcp</td>
+<td>Host Name Server</td>
+</tr>
+<tr>
+<td>nameserver</td>
+<td>42/udp</td>
+<td>Host Name Server</td>
+</tr>
+<tr>
+<td>nicname</td>
+<td>43/tcp</td>
+<td>Who Is</td>
+</tr>
+<tr>
+<td>nicname</td>
+<td>43/udp</td>
+<td>Who Is</td>
+</tr>
+<tr>
+<td>mpm-flags</td>
+<td>44/tcp</td>
+<td>MPM FLAGS Protocol</td>
+</tr>
+<tr>
+<td>mpm-flags</td>
+<td>44/udp</td>
+<td>MPM FLAGS Protocol</td>
+</tr>
+<tr>
+<td>mpm</td>
+<td>45/tcp</td>
+<td>Message Processing Module [recv]</td>
+</tr>
+<tr>
+<td>mpm</td>
+<td>45/udp</td>
+<td>Message Processing Module [recv]</td>
+</tr>
+<tr>
+<td>mpm-snd</td>
+<td>46/tcp</td>
+<td>MPM [default send]</td>
+</tr>
+<tr>
+<td>mpm-snd</td>
+<td>46/udp</td>
+<td>MPM [default send]</td>
+</tr>
+<tr>
+<td>#</td>
+<td></td>
+<td>Jon Postel <postel#isi.edu></postel#isi.edu></td>
+</tr>
+<tr>
+<td>ni-ftp</td>
+<td>47/tcp</td>
+<td>NI FTP</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Data-from-RFC1700"><a href="#Data-from-RFC1700" class="headerlink" title="Data from RFC1700"></a>Data from <a href="https://tools.ietf.org/html/rfc1700" target="_blank" rel="noopener">RFC1700</a></h3>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>magbone</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    
+    <a href="https://i.xhi.io/2019/01/23/ports-details/" title="端口对照表">https://i.xhi.io/2019/01/23/ports-details/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/资料/" rel="tag"># 资料</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/01/sorts/" rel="next" title="排序汇总">
+                <i class="fa fa-chevron-left"></i> 排序汇总
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/29/md/" rel="prev" title="摘要算法">
+                摘要算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">magbone</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#端口对照表"><span class="nav-number">1.</span> <span class="nav-text">端口对照表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-from-RFC1700"><span class="nav-number">1.0.1.</span> <span class="nav-text">Data from RFC1700</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">magbone</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+</body>
+</html>

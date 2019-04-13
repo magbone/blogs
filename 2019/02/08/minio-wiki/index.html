@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-cn">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="inio 是一个基于Apache License v2.0开源协议的对象存储服务。它兼容亚马逊S3云存储服务接口，非常适合于存储大容量非结构化的数据，例如图片、视频、日志文件、备份数据和容器/虚拟机镜像等，而一个对象文件可以是任意大小，从几kb到最大5T不等。  Minio是一个非常轻量的服务,可以很简单的和其他应用的结合，类似 NodeJS, Redis 或者 MySQL。 Docker 容器稳">
+<meta name="keywords" content="readme">
+<meta property="og:type" content="article">
+<meta property="og:title" content="minio使用手册">
+<meta property="og:url" content="https://i.xhi.io/2019/02/08/minio-wiki/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="inio 是一个基于Apache License v2.0开源协议的对象存储服务。它兼容亚马逊S3云存储服务接口，非常适合于存储大容量非结构化的数据，例如图片、视频、日志文件、备份数据和容器/虚拟机镜像等，而一个对象文件可以是任意大小，从几kb到最大5T不等。  Minio是一个非常轻量的服务,可以很简单的和其他应用的结合，类似 NodeJS, Redis 或者 MySQL。 Docker 容器稳">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://github.com/minio/minio/blob/master/docs/screenshots/minio-browser.png?raw=true">
+<meta property="og:updated_time" content="2019-04-13T04:50:02.090Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="minio使用手册">
+<meta name="twitter:description" content="inio 是一个基于Apache License v2.0开源协议的对象存储服务。它兼容亚马逊S3云存储服务接口，非常适合于存储大容量非结构化的数据，例如图片、视频、日志文件、备份数据和容器/虚拟机镜像等，而一个对象文件可以是任意大小，从几kb到最大5T不等。  Minio是一个非常轻量的服务,可以很简单的和其他应用的结合，类似 NodeJS, Redis 或者 MySQL。 Docker 容器稳">
+<meta name="twitter:image" content="https://github.com/minio/minio/blob/master/docs/screenshots/minio-browser.png?raw=true">
+
+
+
+
+
+
+  <link rel="canonical" href="https://i.xhi.io/2019/02/08/minio-wiki/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>minio使用手册 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+ 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://i.xhi.io/2019/02/08/minio-wiki/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magbone">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">minio使用手册
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-02-08 18:32:38" itemprop="dateCreated datePublished" datetime="2019-02-08T18:32:38+08:00">2019-02-08</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-04-13 12:50:02" itemprop="dateModified" datetime="2019-04-13T12:50:02+08:00">2019-04-13</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>inio 是一个基于Apache License v2.0开源协议的对象存储服务。它兼容亚马逊S3云存储服务接口，非常适合于存储大容量非结构化的数据，例如图片、视频、日志文件、备份数据和容器/虚拟机镜像等，而一个对象文件可以是任意大小，从几kb到最大5T不等。 </p>
+<p>Minio是一个非常轻量的服务,可以很简单的和其他应用的结合，类似 NodeJS, Redis 或者 MySQL。</p>
+<h2 id="Docker-容器"><a href="#Docker-容器" class="headerlink" title="Docker 容器"></a>Docker 容器</h2><h3 id="稳定版"><a href="#稳定版" class="headerlink" title="稳定版"></a>稳定版</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pull minio/minio</span><br><span class="line">docker run -p 9000:9000 minio/minio server /data</span><br></pre></td></tr></table></figure>
+<h3 id="尝鲜版"><a href="#尝鲜版" class="headerlink" title="尝鲜版"></a>尝鲜版</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pull minio/minio:edge</span><br><span class="line">docker run -p 9000:9000 minio/minio:edge server /data</span><br></pre></td></tr></table></figure>
+<p>更多Docker部署信息请访问 <a href="https://docs.minio.io/docs/minio-docker-quickstart-guide" target="_blank" rel="noopener">这里</a></p>
+<h2 id="macOS"><a href="#macOS" class="headerlink" title="macOS"></a>macOS</h2><h3 id="Homebrew"><a href="#Homebrew" class="headerlink" title="Homebrew"></a>Homebrew</h3><p>使用 <a href="http://brew.sh/" target="_blank" rel="noopener">Homebrew</a>安装minio</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew install minio/stable/minio</span><br><span class="line">minio server /data</span><br></pre></td></tr></table></figure>
+<h4 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h4><p>如果你之前使用 <code>brew install minio</code>安装过minio, 可以用 <code>minio/stable/minio</code> 官方镜像进行重装. 由于golang 1.8的bug,homebrew版本不太稳定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew uninstall minio</span><br><span class="line">brew install minio/stable/minio</span><br></pre></td></tr></table></figure>
+<h3 id="下载二进制文件"><a href="#下载二进制文件" class="headerlink" title="下载二进制文件"></a>下载二进制文件</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>CPU架构</th>
+<th>地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apple macOS</td>
+<td>64-bit Intel</td>
+<td><a href="https://dl.minio.io/server/minio/release/darwin-amd64/minio" target="_blank" rel="noopener">https://dl.minio.io/server/minio/release/darwin-amd64/minio</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod 755 minio</span><br><span class="line">./minio server /data</span><br></pre></td></tr></table></figure>
+<h2 id="GNU-Linux"><a href="#GNU-Linux" class="headerlink" title="GNU/Linux"></a>GNU/Linux</h2><h3 id="下载二进制文件-1"><a href="#下载二进制文件-1" class="headerlink" title="下载二进制文件"></a>下载二进制文件</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>CPU架构</th>
+<th>地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GNU/Linux</td>
+<td>64-bit Intel</td>
+<td><a href="https://dl.minio.io/server/minio/release/linux-amd64/minio" target="_blank" rel="noopener">https://dl.minio.io/server/minio/release/linux-amd64/minio</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod +x minio</span><br><span class="line">./minio server /data</span><br></pre></td></tr></table></figure>
+<h2 id="微软Windows系统"><a href="#微软Windows系统" class="headerlink" title="微软Windows系统"></a>微软Windows系统</h2><h3 id="下载二进制文件-2"><a href="#下载二进制文件-2" class="headerlink" title="下载二进制文件"></a>下载二进制文件</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>CPU架构</th>
+<th>地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>微软Windows系统</td>
+<td>64位</td>
+<td><a href="https://dl.minio.io/server/minio/release/windows-amd64/minio.exe" target="_blank" rel="noopener">https://dl.minio.io/server/minio/release/windows-amd64/minio.exe</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">minio.exe server D:\Photos</span><br></pre></td></tr></table></figure>
+<h2 id="FreeBSD"><a href="#FreeBSD" class="headerlink" title="FreeBSD"></a>FreeBSD</h2><h3 id="Port"><a href="#Port" class="headerlink" title="Port"></a>Port</h3><p>使用 <a href="https://github.com/freebsd/pkg" target="_blank" rel="noopener">pkg</a>进行安装。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pkg install minio</span><br><span class="line">sysrc minio_enable=yes</span><br><span class="line">sysrc minio_disks=/home/user/Photos</span><br><span class="line">service minio start</span><br></pre></td></tr></table></figure>
+<h2 id="使用源码安装"><a href="#使用源码安装" class="headerlink" title="使用源码安装"></a>使用源码安装</h2><p>采用源码安装仅供开发人员和高级用户使用,如果你还没有Golang环境， 请参考 <a href="https://docs.minio.io/docs/how-to-install-golang" target="_blank" rel="noopener">How to install Golang</a>.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get -u github.com/minio/minio</span><br></pre></td></tr></table></figure>
+<h2 id="使用Minio浏览器进行验证"><a href="#使用Minio浏览器进行验证" class="headerlink" title="使用Minio浏览器进行验证"></a>使用Minio浏览器进行验证</h2><p>安装后使用浏览器访问<a href="http://127.0.0.1:9000" target="_blank" rel="noopener">http://127.0.0.1:9000</a>，如果可以访问，则表示minio已经安装成功。</p>
+<p><img src="https://github.com/minio/minio/blob/master/docs/screenshots/minio-browser.png?raw=true" alt="Screenshot"></p>
+<h2 id="使用Minio客户端-mc进行验证"><a href="#使用Minio客户端-mc进行验证" class="headerlink" title="使用Minio客户端 mc进行验证"></a>使用Minio客户端 <code>mc</code>进行验证</h2><p><code>mc</code> 提供了一些UNIX常用命令的替代品，像ls, cat, cp, mirror, diff这些。 它支持文件系统和亚马逊S3云存储服务。 更多信息请参考 <a href="https://docs.minio.io/docs/minio-client-quickstart-guide" target="_blank" rel="noopener">mc快速入门</a> 。</p>
+<h2 id="已经存在的数据"><a href="#已经存在的数据" class="headerlink" title="已经存在的数据"></a>已经存在的数据</h2><p>当在单块磁盘上部署Minio server,Minio server允许客户端访问数据目录下已经存在的数据。比如，如果Minio使用<code>minio server /mnt/data</code>启动，那么所有已经在<code>/mnt/data</code>目录下的数据都可以被客户端访问到。</p>
+<p>上述描述对所有网关后端同样有效。</p>
+<h2 id="了解更多"><a href="#了解更多" class="headerlink" title="了解更多"></a>了解更多</h2><ul>
+<li><a href="https://docs.minio.io/docs/minio-erasure-code-quickstart-guide" target="_blank" rel="noopener">Minio纠删码入门</a></li>
+<li><a href="https://docs.minio.io/docs/minio-client-quickstart-guide" target="_blank" rel="noopener"><code>mc</code>快速入门</a></li>
+<li><a href="https://docs.minio.io/docs/aws-cli-with-minio" target="_blank" rel="noopener">使用 <code>aws-cli</code></a></li>
+<li><a href="https://docs.minio.io/docs/s3cmd-with-minio" target="_blank" rel="noopener">使用 <code>s3cmd</code></a></li>
+<li><a href="https://docs.minio.io/docs/golang-client-quickstart-guide" target="_blank" rel="noopener">使用 <code>minio-go</code> SDK</a></li>
+<li><a href="https://docs.minio.io" target="_blank" rel="noopener">Minio文档</a></li>
+</ul>
+<h2 id="如何参与到Minio项目"><a href="#如何参与到Minio项目" class="headerlink" title="如何参与到Minio项目"></a>如何参与到Minio项目</h2><p>请参考 <a href="https://github.com/minio/minio/blob/master/CONTRIBUTING.md" target="_blank" rel="noopener">贡献者指南</a>。欢迎各位中国程序员加到Minio项目中。</p>
+<h2 id="文档来源https-github-com-minio-minio-blob-master-README-zh-CN-md"><a href="#文档来源https-github-com-minio-minio-blob-master-README-zh-CN-md" class="headerlink" title="文档来源https://github.com/minio/minio/blob/master/README_zh_CN.md"></a>文档来源<a href="https://github.com/minio/minio/blob/master/README_zh_CN.md" target="_blank" rel="noopener">https://github.com/minio/minio/blob/master/README_zh_CN.md</a></h2>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>magbone</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    
+    <a href="https://i.xhi.io/2019/02/08/minio-wiki/" title="minio使用手册">https://i.xhi.io/2019/02/08/minio-wiki/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/readme/" rel="tag"># readme</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/29/md/" rel="next" title="摘要算法">
+                <i class="fa fa-chevron-left"></i> 摘要算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">magbone</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-容器"><span class="nav-number">1.</span> <span class="nav-text">Docker 容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#稳定版"><span class="nav-number">1.1.</span> <span class="nav-text">稳定版</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尝鲜版"><span class="nav-number">1.2.</span> <span class="nav-text">尝鲜版</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#macOS"><span class="nav-number">2.</span> <span class="nav-text">macOS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Homebrew"><span class="nav-number">2.1.</span> <span class="nav-text">Homebrew</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Note"><span class="nav-number">2.1.1.</span> <span class="nav-text">Note</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下载二进制文件"><span class="nav-number">2.2.</span> <span class="nav-text">下载二进制文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GNU-Linux"><span class="nav-number">3.</span> <span class="nav-text">GNU/Linux</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载二进制文件-1"><span class="nav-number">3.1.</span> <span class="nav-text">下载二进制文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微软Windows系统"><span class="nav-number">4.</span> <span class="nav-text">微软Windows系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载二进制文件-2"><span class="nav-number">4.1.</span> <span class="nav-text">下载二进制文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FreeBSD"><span class="nav-number">5.</span> <span class="nav-text">FreeBSD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Port"><span class="nav-number">5.1.</span> <span class="nav-text">Port</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用源码安装"><span class="nav-number">6.</span> <span class="nav-text">使用源码安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Minio浏览器进行验证"><span class="nav-number">7.</span> <span class="nav-text">使用Minio浏览器进行验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Minio客户端-mc进行验证"><span class="nav-number">8.</span> <span class="nav-text">使用Minio客户端 mc进行验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#已经存在的数据"><span class="nav-number">9.</span> <span class="nav-text">已经存在的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#了解更多"><span class="nav-number">10.</span> <span class="nav-text">了解更多</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何参与到Minio项目"><span class="nav-number">11.</span> <span class="nav-text">如何参与到Minio项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文档来源https-github-com-minio-minio-blob-master-README-zh-CN-md"><span class="nav-number">12.</span> <span class="nav-text">文档来源https://github.com/minio/minio/blob/master/README_zh_CN.md</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">magbone</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+</body>
+</html>

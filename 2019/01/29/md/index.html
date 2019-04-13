@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-cn">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="MD2介绍MD2消息摘要算法是Ronald Rivest在1989年发现的加密哈希方法。这个算法是对八位计算机的优化。MD2在RFC1319中有详细的介绍。即使MD2在2014后已不再被认为是安全的，但它仍然保留在用MD2和RSA生成的证书的公钥的基础。『MD』在MD2中代表”Message Digest（消息摘要）”。 以下内容翻译自rfc1319  摘要 &amp;lt;/br&amp;gt;这个文档描述MD">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="摘要算法">
+<meta property="og:url" content="https://i.xhi.io/2019/01/29/md/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="MD2介绍MD2消息摘要算法是Ronald Rivest在1989年发现的加密哈希方法。这个算法是对八位计算机的优化。MD2在RFC1319中有详细的介绍。即使MD2在2014后已不再被认为是安全的，但它仍然保留在用MD2和RSA生成的证书的公钥的基础。『MD』在MD2中代表”Message Digest（消息摘要）”。 以下内容翻译自rfc1319  摘要 &amp;lt;/br&amp;gt;这个文档描述MD">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-04-13T04:50:02.089Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="摘要算法">
+<meta name="twitter:description" content="MD2介绍MD2消息摘要算法是Ronald Rivest在1989年发现的加密哈希方法。这个算法是对八位计算机的优化。MD2在RFC1319中有详细的介绍。即使MD2在2014后已不再被认为是安全的，但它仍然保留在用MD2和RSA生成的证书的公钥的基础。『MD』在MD2中代表”Message Digest（消息摘要）”。 以下内容翻译自rfc1319  摘要 &amp;lt;/br&amp;gt;这个文档描述MD">
+
+
+
+
+
+
+  <link rel="canonical" href="https://i.xhi.io/2019/01/29/md/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>摘要算法 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+ 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://i.xhi.io/2019/01/29/md/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magbone">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">摘要算法
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-01-29 17:05:35" itemprop="dateCreated datePublished" datetime="2019-01-29T17:05:35+08:00">2019-01-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-04-13 12:50:02" itemprop="dateModified" datetime="2019-04-13T12:50:02+08:00">2019-04-13</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MD2"><a href="#MD2" class="headerlink" title="MD2"></a>MD2</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>MD2消息摘要算法是Ronald Rivest在1989年发现的加密哈希方法。这个算法是对八位计算机的优化。MD2在<a href="https://tools.ietf.org/html/rfc1319" target="_blank" rel="noopener">RFC1319</a>中有详细的介绍。即使MD2在2014后已不再被认为是安全的，但它仍然保留在用MD2和RSA生成的证书的公钥的基础。『MD』在MD2中代表”Message Digest（消息摘要）”。</p>
+<p>以下内容翻译自<a href="https://tools.ietf.org/html/rfc1319" target="_blank" rel="noopener">rfc1319</a></p>
+<blockquote>
+<h3 id="摘要-lt-br-gt"><a href="#摘要-lt-br-gt" class="headerlink" title="摘要 &lt;/br&gt;"></a>摘要 &lt;/br&gt;</h3><p>这个文档描述MD2消息摘要算法。该算法将一个任意长度的消息作为输入并且运行输出一个128bit的『指纹』或者『消息摘要』输入。据推测它不可能得出两条消息有一样的消息摘要，或者能计算出人格消息有一个预先给定的目标消息摘要。MD2算法旨在数字签名应用，在大文件必须在一个公钥加密系统像RSA产生的私钥签名之前用安全的行为进行『压缩』。&lt;/br&gt;<br>使用MD2的许可由非经营的 Internet Privacy Enhanced Mail{1-3}提供的。&lt;/br&gt;</p>
+<h4 id="术语和注意事项-lt-br-gt"><a href="#术语和注意事项-lt-br-gt" class="headerlink" title="术语和注意事项 &lt;/br&gt;"></a>术语和注意事项 &lt;/br&gt;</h4><p>本文中，1 “byte” 是代表8bit。 &lt;/br&gt;<br>x_i 代表 “s sub i”。如果标注的是一个表达式，我们像x_{i+1}用大括号包裹它。同样的，我们使用^表示x^i为x的i次方。&lt;/br&gt;<br>X xor Y 表示X与Y异或。</p>
+<h3 id="MD2算法描述"><a href="#MD2算法描述" class="headerlink" title="MD2算法描述"></a>MD2算法描述</h3><p>开始我们假设有b-byte的消息作为输入，并且我们细化找到它的消息摘要。其中b是一个任意无符号正数；b可以是零，可以任意大小。我们想象这几byte消息如下：&lt;/br&gt;</p>
+<p><center>m_0 m_1 ... m_{b-1}</center> &lt;/br&gt;<br>接下来的五个步骤教你如何生成一个消息的消息摘要。 </p>
+<h4 id="第一步-附上扩展的bytes"><a href="#第一步-附上扩展的bytes" class="headerlink" title="第一步 附上扩展的bytes"></a>第一步 附上扩展的bytes</h4><p>消息是被扩展的以至于他的长度(bytes)是模16等于零的，它是很多个16bytes长的。这个扩展是必须的，即便它的长度模16等于零。&lt;/br&gt;<br>扩展的工作如下：”i” 值 “i” byte被扩展的信息的长度能模16等于0。所以至少扩展1 byte和至多16 bytes。&lt;/br&gt;<br>这个时候，在扩展之后的信息的是准确的多个16 bytes长度。M[0 … N-1]为扩展后的信息，其中N是多个16。</p>
+<h4 id="第二步-扩展校验码"><a href="#第二步-扩展校验码" class="headerlink" title="第二步 扩展校验码"></a>第二步 扩展校验码</h4><p>一个16-byte的信息的校验码被拼接在前一个步骤结果上。&lt;/br&gt;<br>这一步使用一个256-byte的 从pi 构建的『随机』排列。S[i]第i个表中的元素。这个表在附录中给出的。&lt;/br&gt;<br>如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> /* 清除校验码 */</span><br><span class="line"> For i = 0 to 15 do:</span><br><span class="line">   Set C[i] to  0.</span><br><span class="line">  end</span><br><span class="line">Set L to 0.</span><br><span class="line">  /* 执行每个16子的块 */</span><br><span class="line">  For i = 0 to N/16-1 do</span><br><span class="line">       /* i个校验码块 */</span><br><span class="line">       For j = 0 to 15 do</span><br><span class="line">         Set c to M[i * 16 + j].</span><br><span class="line">         Set C[j] to S[c xor L].</span><br><span class="line">         Set L to C[j].</span><br><span class="line">        end</span><br><span class="line">  end</span><br></pre></td></tr></table></figure></p>
+<p> 16-byte 的校验码C[0 … 15]就被拼接在了消息上，设M[0 和校验码]， 其中N’ = N + 16。</p>
+<h4 id="第三步初始化MD缓冲区"><a href="#第三步初始化MD缓冲区" class="headerlink" title="第三步初始化MD缓冲区"></a>第三步初始化MD缓冲区</h4><p> 48-byte 缓冲区X，是用来结算消息摘要的。这个缓冲区初始化为0.</p>
+<h5 id="第四步-创建-16-Byte-块的消息"><a href="#第四步-创建-16-Byte-块的消息" class="headerlink" title="第四步 创建 16-Byte 块的消息"></a>第四步 创建 16-Byte 块的消息</h5><p> 这一步使用相同的256-byte序列S，像第二步一样做。<br> 如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/* 执行每个16子的块*/</span><br><span class="line">For i = 0  to N&apos;/16-1 do</span><br><span class="line">     /* 复制每个块j到X */</span><br><span class="line">     For j = 0 to 15 do</span><br><span class="line">        Set X[16 + j] to M[i * 16 + j].</span><br><span class="line">        Set X[32 + j] to (X[16 + j] xor X[j]).</span><br><span class="line">        end</span><br><span class="line">        Set t to 0</span><br><span class="line">        /* 18次循环 */</span><br><span class="line">        For j = 0 to 17 do</span><br><span class="line">           /* 循环j */</span><br><span class="line">           For k = 0  to 47 do</span><br><span class="line">              Set t and X[k] to (X[k] xor S[t]).</span><br><span class="line">            end</span><br><span class="line">         end</span><br><span class="line">  end</span><br></pre></td></tr></table></figure></p>
+<h4 id="第五步输出"><a href="#第五步输出" class="headerlink" title="第五步输出"></a>第五步输出</h4><p>消息摘要输出X[0 … 15]。开始于X[0]，结束于X[15]。</p>
+</blockquote>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>以下代码是来源参考文档，有所修改。</p>
+<p>md2算法有如下三个文件<code>global.h</code>，<code>md2.h</code>，<code>md2c.c</code>。</p>
+<h3 id="global-h"><a href="#global-h" class="headerlink" title="global.h"></a>global.h</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/* PROTOTYPES */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> PROTOTYPES</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PROTOTYPES 0</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* POINTER 定义为一个一般的指针类型 */</span></span><br><span class="line"><span class="keyword">typedef</span>  <span class="keyword">unsigned</span>  <span class="keyword">char</span> *POINTER;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* UINT2 定义为2byte的变量 */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">short</span> <span class="keyword">int</span> UINT2;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* UINT4 定义为4byte的变量 */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">int</span> UINT4;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* PROTO_LIST 定义是基于PROTOTYPES怎样定义的，如果使用PROTOTYPES，那么PROTO_LIST返回这个列表，否则返回一个空的列表。 */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> PROTOTYPES</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PROTO_LIST(list) list</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PROTO_LIST(List) ()</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="md2-h"><a href="#md2-h" class="headerlink" title="md2.h"></a>md2.h</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> state[<span class="number">16</span>];   <span class="comment">/* 状态 */</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> checksum[<span class="number">16</span>];  <span class="comment">/* 校验码 */</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> count; <span class="comment">/* 多少byte，模16 */</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> buffer[<span class="number">16</span>]; <span class="comment">/* 输入缓冲 */</span></span><br><span class="line">&#125; MD2_CTX;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> MD2Init <span class="title">PROTO_LIST</span><span class="params">(( MD2_ CTX * ))</span></span>;'</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> MD2Update <span class="title">PROTO_LIST</span><span class="params">(( MD2_CTX *,  <span class="keyword">unsigned</span> <span class="keyword">char</span> *, <span class="keyword">unsigned</span> <span class="keyword">int</span> ))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> MD2Final <span class="title">PROTO_LIST</span> <span class="params">((<span class="keyword">unsigned</span> <span class="keyword">char</span> [<span class="number">16</span>], MD2_CTX *))</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="md2c-c"><a href="#md2c-c" class="headerlink" title="md2c.c"></a>md2c.c</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"global.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"md2.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"global.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"md2.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> MD2Transform PROTO_LIST</span><br><span class="line">  ((<span class="keyword">unsigned</span> <span class="keyword">char</span> [<span class="number">16</span>], <span class="keyword">unsigned</span> <span class="keyword">char</span> [<span class="number">16</span>], <span class="keyword">unsigned</span> <span class="keyword">char</span> [<span class="number">16</span>]));</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> MD2_memcpy <span class="title">PROTO_LIST</span> <span class="params">((POINTER, POINTER, <span class="keyword">unsigned</span> <span class="keyword">int</span>))</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> MD2_memset <span class="title">PROTO_LIST</span> <span class="params">((POINTER, <span class="keyword">int</span>, <span class="keyword">unsigned</span> <span class="keyword">int</span>))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 从Pi中构造排列，它给出『随机』非线性置换操作</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> PI_SUBST[<span class="number">256</span>] = &#123;</span><br><span class="line">  <span class="number">41</span>, <span class="number">46</span>, <span class="number">67</span>, <span class="number">201</span>, <span class="number">162</span>, <span class="number">216</span>, <span class="number">124</span>, <span class="number">1</span>, <span class="number">61</span>, <span class="number">54</span>, <span class="number">84</span>, <span class="number">161</span>, <span class="number">236</span>, <span class="number">240</span>, <span class="number">6</span>,<span class="number">19</span>, <span class="number">98</span>, <span class="number">167</span>, <span class="number">5</span>, <span class="number">243</span>, <span class="number">192</span>, <span class="number">199</span>, <span class="number">115</span>, <span class="number">140</span>, <span class="number">152</span>, <span class="number">147</span>, <span class="number">43</span>, <span class="number">217</span>, <span class="number">188</span>,</span><br><span class="line">  <span class="number">76</span>, <span class="number">130</span>, <span class="number">202</span>, <span class="number">30</span>, <span class="number">155</span>, <span class="number">87</span>, <span class="number">60</span>, <span class="number">253</span>, <span class="number">212</span>, <span class="number">224</span>, <span class="number">22</span>, <span class="number">103</span>, <span class="number">66</span>, <span class="number">111</span>, <span class="number">24</span>,</span><br><span class="line">  <span class="number">138</span>, <span class="number">23</span>, <span class="number">229</span>, <span class="number">18</span>, <span class="number">190</span>, <span class="number">78</span>, <span class="number">196</span>, <span class="number">214</span>, <span class="number">218</span>, <span class="number">158</span>, <span class="number">222</span>, <span class="number">73</span>, <span class="number">160</span>, <span class="number">251</span>,</span><br><span class="line">  <span class="number">245</span>, <span class="number">142</span>, <span class="number">187</span>, <span class="number">47</span>, <span class="number">238</span>, <span class="number">122</span>, <span class="number">169</span>, <span class="number">104</span>, <span class="number">121</span>, <span class="number">145</span>, <span class="number">21</span>, <span class="number">178</span>, <span class="number">7</span>, <span class="number">63</span>,</span><br><span class="line">  <span class="number">148</span>, <span class="number">194</span>, <span class="number">16</span>, <span class="number">137</span>, <span class="number">11</span>, <span class="number">34</span>, <span class="number">95</span>, <span class="number">33</span>, <span class="number">128</span>, <span class="number">127</span>, <span class="number">93</span>, <span class="number">154</span>, <span class="number">90</span>, <span class="number">144</span>, <span class="number">50</span>,</span><br><span class="line">  <span class="number">39</span>, <span class="number">53</span>, <span class="number">62</span>, <span class="number">204</span>, <span class="number">231</span>, <span class="number">191</span>, <span class="number">247</span>, <span class="number">151</span>, <span class="number">3</span>, <span class="number">255</span>, <span class="number">25</span>, <span class="number">48</span>, <span class="number">179</span>, <span class="number">72</span>, <span class="number">165</span>,</span><br><span class="line">  <span class="number">181</span>, <span class="number">209</span>, <span class="number">215</span>, <span class="number">94</span>, <span class="number">146</span>, <span class="number">42</span>, <span class="number">172</span>, <span class="number">86</span>, <span class="number">170</span>, <span class="number">198</span>, <span class="number">79</span>, <span class="number">184</span>, <span class="number">56</span>, <span class="number">210</span>,</span><br><span class="line">  <span class="number">150</span>, <span class="number">164</span>, <span class="number">125</span>, <span class="number">182</span>, <span class="number">118</span>, <span class="number">252</span>, <span class="number">107</span>, <span class="number">226</span>, <span class="number">156</span>, <span class="number">116</span>, <span class="number">4</span>, <span class="number">241</span>, <span class="number">69</span>, <span class="number">157</span>,</span><br><span class="line">  <span class="number">112</span>, <span class="number">89</span>, <span class="number">100</span>, <span class="number">113</span>, <span class="number">135</span>, <span class="number">32</span>, <span class="number">134</span>, <span class="number">91</span>, <span class="number">207</span>, <span class="number">101</span>, <span class="number">230</span>, <span class="number">45</span>, <span class="number">168</span>, <span class="number">2</span>, <span class="number">27</span>,</span><br><span class="line">  <span class="number">96</span>, <span class="number">37</span>, <span class="number">173</span>, <span class="number">174</span>, <span class="number">176</span>, <span class="number">185</span>, <span class="number">246</span>, <span class="number">28</span>, <span class="number">70</span>, <span class="number">97</span>, <span class="number">105</span>, <span class="number">52</span>, <span class="number">64</span>, <span class="number">126</span>, <span class="number">15</span>,</span><br><span class="line">  <span class="number">85</span>, <span class="number">71</span>, <span class="number">163</span>, <span class="number">35</span>, <span class="number">221</span>, <span class="number">81</span>, <span class="number">175</span>, <span class="number">58</span>, <span class="number">195</span>, <span class="number">92</span>, <span class="number">249</span>, <span class="number">206</span>, <span class="number">186</span>, <span class="number">197</span>,</span><br><span class="line">  <span class="number">234</span>, <span class="number">38</span>, <span class="number">44</span>, <span class="number">83</span>, <span class="number">13</span>, <span class="number">110</span>, <span class="number">133</span>, <span class="number">40</span>, <span class="number">132</span>, <span class="number">9</span>, <span class="number">211</span>, <span class="number">223</span>, <span class="number">205</span>, <span class="number">244</span>, <span class="number">65</span>,</span><br><span class="line">  <span class="number">129</span>, <span class="number">77</span>, <span class="number">82</span>, <span class="number">106</span>, <span class="number">220</span>, <span class="number">55</span>, <span class="number">200</span>, <span class="number">108</span>, <span class="number">193</span>, <span class="number">171</span>, <span class="number">250</span>, <span class="number">36</span>, <span class="number">225</span>, <span class="number">123</span>,</span><br><span class="line">  <span class="number">8</span>, <span class="number">12</span>, <span class="number">189</span>, <span class="number">177</span>, <span class="number">74</span>, <span class="number">120</span>, <span class="number">136</span>, <span class="number">149</span>, <span class="number">139</span>, <span class="number">227</span>, <span class="number">99</span>, <span class="number">232</span>, <span class="number">109</span>, <span class="number">233</span>,</span><br><span class="line">  <span class="number">203</span>, <span class="number">213</span>, <span class="number">254</span>, <span class="number">59</span>, <span class="number">0</span>, <span class="number">29</span>, <span class="number">57</span>, <span class="number">242</span>, <span class="number">239</span>, <span class="number">183</span>, <span class="number">14</span>, <span class="number">102</span>, <span class="number">88</span>, <span class="number">208</span>, <span class="number">228</span>,</span><br><span class="line">  <span class="number">166</span>, <span class="number">119</span>, <span class="number">114</span>, <span class="number">248</span>, <span class="number">235</span>, <span class="number">117</span>, <span class="number">75</span>, <span class="number">10</span>, <span class="number">49</span>, <span class="number">68</span>, <span class="number">80</span>, <span class="number">180</span>, <span class="number">143</span>, <span class="number">237</span>,</span><br><span class="line">  <span class="number">31</span>, <span class="number">26</span>, <span class="number">219</span>, <span class="number">153</span>, <span class="number">141</span>, <span class="number">51</span>, <span class="number">159</span>, <span class="number">17</span>, <span class="number">131</span>, <span class="number">20</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> *PADDING[] = &#123;</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)<span class="string">""</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)<span class="string">"\001"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)<span class="string">"\002\002"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)<span class="string">"\003\003\003"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)<span class="string">"\004\004\004\004"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)<span class="string">"\005\005\005\005\005"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)<span class="string">"\006\006\006\006\006\006"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)<span class="string">"\007\007\007\007\007\007\007"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)<span class="string">"\010\010\010\010\010\010\010\010"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)<span class="string">"\011\011\011\011\011\011\011\011\011"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)<span class="string">"\012\012\012\012\012\012\012\012\012\012"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)<span class="string">"\013\013\013\013\013\013\013\013\013\013\013"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)<span class="string">"\014\014\014\014\014\014\014\014\014\014\014\014"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)</span><br><span class="line">    <span class="string">"\015\015\015\015\015\015\015\015\015\015\015\015\015"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)</span><br><span class="line">    <span class="string">"\016\016\016\016\016\016\016\016\016\016\016\016\016\016"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)</span><br><span class="line">    <span class="string">"\017\017\017\017\017\017\017\017\017\017\017\017\017\017\017"</span>,</span><br><span class="line">  (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)</span><br><span class="line">    <span class="string">"\020\020\020\020\020\020\020\020\020\020\020\020\020\020\020\020"</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* MD2 初始化 。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MD2Init</span> <span class="params">(context)</span></span></span><br><span class="line"><span class="function">MD2_CTX *context</span>;               <span class="comment">/* 上下文 */</span></span><br><span class="line">&#123;                         </span><br><span class="line">context-&gt;count = <span class="number">0</span>;</span><br><span class="line">MD2_memset ((POINTER)context-&gt;state, <span class="number">0</span>, <span class="keyword">sizeof</span> (context-&gt;state)); MD2_memset ((POINTER)context-&gt;checksum, <span class="number">0</span>, <span class="keyword">sizeof</span> (context-&gt;checksum));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* MD2 块更新操作。继续MD2消息摘要生成操作，运行其他的消息块并且更新上下文。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MD2Update</span> <span class="params">(context, input, inputLen)</span></span></span><br><span class="line"><span class="function">MD2_CTX *context</span>;                                        <span class="comment">/* 上下文 */</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> *input;                                <span class="comment">/* i输入块 */</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> inputLen;                     <span class="comment">/* 输入块的长度 */</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> i, index, partLen;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 更新模16后所得的个数 */</span></span><br><span class="line">  index = context-&gt;count;</span><br><span class="line">  context-&gt;count = (index + inputLen) &amp; <span class="number">0xf</span>;</span><br><span class="line"></span><br><span class="line">  partLen = <span class="number">16</span> - index;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 多次转换</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">  <span class="keyword">if</span> (inputLen &gt;= partLen) &#123;</span><br><span class="line">    MD2_memcpy</span><br><span class="line">      ((POINTER)&amp;context-&gt;buffer[index], (POINTER)input, partLen);</span><br><span class="line">    MD2Transform (context-&gt;state, context-&gt;checksum, context-&gt;buffer);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = partLen; i + <span class="number">15</span> &lt; inputLen; i += <span class="number">16</span>)</span><br><span class="line">      MD2Transform (context-&gt;state, context-&gt;checksum, &amp;input[i]);</span><br><span class="line"></span><br><span class="line">    index = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 拷贝到输出缓冲区 */</span></span><br><span class="line">  MD2_memcpy</span><br><span class="line">    ((POINTER)&amp;context-&gt;buffer[index], (POINTER)&amp;input[i],</span><br><span class="line">     inputLen-i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* MD2 终止。 结束MD2消息摘要操作，写入消息摘要并且初始化上下文。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MD2Final</span> <span class="params">(digest, context)</span></span></span><br><span class="line">unsigned char digest[16];                         /* 消息摘要 */</span><br><span class="line">MD2_CTX *context;                                        <span class="comment">/* 上下文 */</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> index, padLen;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*  填满到能被16整除</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  index = context-&gt;count;</span><br><span class="line">  padLen = <span class="number">16</span> - index;</span><br><span class="line">  MD2Update (context, PADDING[padLen], padLen);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 扩展校验码 */</span></span><br><span class="line">  MD2Update (context, context-&gt;checksum, <span class="number">16</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 在摘要中储存状态信息 */</span></span><br><span class="line">  MD2_memcpy ((POINTER)digest, (POINTER)context-&gt;state, <span class="number">16</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 初始化指针</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  MD2_memset ((POINTER)context, <span class="number">0</span>, <span class="keyword">sizeof</span> (*context));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* MD2 基本的转换。基于块转换状态和跟新校验码。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">MD2Transform</span> <span class="params">(state, checksum, block)</span></span></span><br><span class="line">unsigned char state[16];</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> checksum[<span class="number">16</span>];</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> block[<span class="number">16</span>];</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> i, j, t;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">char</span> x[<span class="number">48</span>];</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 从状态，块，状态^块构建加密块</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  MD2_memcpy ((POINTER)x, (POINTER)state, <span class="number">16</span>);</span><br><span class="line">  MD2_memcpy ((POINTER)x+<span class="number">16</span>, (POINTER)block, <span class="number">16</span>);</span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">16</span>; i++)</span><br><span class="line">    x[i+<span class="number">32</span>] = state[i] ^ block[i];</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 加密块 (18 次循环).</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  t = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">18</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="number">48</span>; j++)</span><br><span class="line">      t = x[j] ^= PI_SUBST[t];</span><br><span class="line">    t = (t + i) &amp; <span class="number">0xff</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/* 保存新的状态 */</span></span><br><span class="line">  MD2_memcpy ((POINTER)state, (POINTER)x, <span class="number">16</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 更新校验码。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  t = checksum[<span class="number">15</span>];</span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">16</span>; i++)</span><br><span class="line">    t = checksum[i] ^= PI_SUBST[block[i] ^ t];</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 初始化指针</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  MD2_memset ((POINTER)x, <span class="number">0</span>, <span class="keyword">sizeof</span> (x));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 注意： 尽可能使用memset代替for循环。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">MD2_memcpy</span> <span class="params">(output, input, len)</span></span></span><br><span class="line"><span class="function">POINTER output</span>;</span><br><span class="line">POINTER input;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> len;</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; len; i++)</span><br><span class="line">    output[i] = input[i];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 注意： 尽可能使用memset代替for循环。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">MD2_memset</span> <span class="params">(output, value, len)</span></span></span><br><span class="line"><span class="function">POINTER output</span>;</span><br><span class="line"><span class="keyword">int</span> value;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> len;</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; len; i++)</span><br><span class="line">    ((<span class="keyword">char</span> *)output)[i] = (<span class="keyword">char</span>)value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="mddriver-c"><a href="#mddriver-c" class="headerlink" title="mddriver.c"></a>mddriver.c</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MD</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MD MD5</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"global.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> MD == 2</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"md2.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> MD == 4</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"md4.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> MD == 5</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"md5.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 一个测试块的长度，测试块的数量。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TEST_BLOCK_LEN 1000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TEST_BLOCK_COUNT 1000</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> MDString <span class="title">PROTO_LIST</span> <span class="params">((<span class="keyword">char</span> *))</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> MDTimeTrial <span class="title">PROTO_LIST</span> <span class="params">((<span class="keyword">void</span>))</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> MDTestSuite <span class="title">PROTO_LIST</span> <span class="params">((<span class="keyword">void</span>))</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> MDFile <span class="title">PROTO_LIST</span> <span class="params">((<span class="keyword">char</span> *))</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> MDFilter <span class="title">PROTO_LIST</span> <span class="params">((<span class="keyword">void</span>))</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> MDPrint <span class="title">PROTO_LIST</span> <span class="params">((<span class="keyword">unsigned</span> <span class="keyword">char</span> [<span class="number">16</span>]))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> MD == 2</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MD_CTX MD2_CTX</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MDInit MD2Init</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MDUpdate MD2Update</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MDFinal MD2Final</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> MD == 4</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MD_CTX MD4_CTX</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MDInit MD4Init</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MDUpdate MD4Update</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MDFinal MD4Final</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> MD == 5</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MD_CTX MD5_CTX</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MDInit MD5Init</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MDUpdate MD5Update</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MDFinal MD5Final</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 主程序。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">   参数(可能有许多的组合):</span></span><br><span class="line"><span class="comment">     -sstring - 字符串的摘要</span></span><br><span class="line"><span class="comment">     -t       - 执行事件测试</span></span><br><span class="line"><span class="comment">     -x       - 执行测试较稳</span></span><br><span class="line"><span class="comment">     filename - 文件测试</span></span><br><span class="line"><span class="comment">     (none)   - 摘要标准输入</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">(argc, argv)</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> argc</span>;</span><br><span class="line"><span class="keyword">char</span> *argv[];</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (argc &gt; <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; argc; i++)</span><br><span class="line">      <span class="keyword">if</span> (argv[i][<span class="number">0</span>] == <span class="string">'-'</span> &amp;&amp; argv[i][<span class="number">1</span>] == <span class="string">'s'</span>)</span><br><span class="line">        MDString (argv[i] + <span class="number">2</span>);</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">strcmp</span> (argv[i], <span class="string">"-t"</span>) == <span class="number">0</span>)</span><br><span class="line">        MDTimeTrial ();</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">strcmp</span> (argv[i], <span class="string">"-x"</span>) == <span class="number">0</span>)</span><br><span class="line">        MDTestSuite ();</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        MDFile (argv[i]);</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    MDFilter ();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*  字符串的消息摘要</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">MDString</span> <span class="params">(<span class="built_in">string</span>)</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="built_in">string</span></span>;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  MD_CTX context;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">char</span> digest[<span class="number">16</span>];</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> len = <span class="built_in">strlen</span> (<span class="built_in">string</span>);</span><br><span class="line"></span><br><span class="line">  MDInit (&amp;context);</span><br><span class="line">  MDUpdate (&amp;context, <span class="built_in">string</span>, len);</span><br><span class="line">  MDFinal (digest, &amp;context);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span> (<span class="string">"MD%d (\"%s\") = "</span>, MD, <span class="built_in">string</span>);</span><br><span class="line">  MDPrint (digest);</span><br><span class="line">  <span class="built_in">printf</span> (<span class="string">"\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 测量摘要TEST_BLOCK_COUNT TEST_BLOCK_LEN-byte</span></span><br><span class="line"><span class="comment">     块的事件.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">MDTimeTrial</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  MD_CTX context;</span><br><span class="line">  <span class="keyword">time_t</span> endTime, startTime;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">char</span> block[TEST_BLOCK_LEN], digest[<span class="number">16</span>];</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span></span><br><span class="line">    (<span class="string">"MD%d time trial. Digesting %d %d-byte blocks ..."</span>, MD,</span><br><span class="line">     TEST_BLOCK_LEN, TEST_BLOCK_COUNT);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*初始化块 */</span></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; TEST_BLOCK_LEN; i++)</span><br><span class="line">    block[i] = (<span class="keyword">unsigned</span> <span class="keyword">char</span>)(i &amp; <span class="number">0xff</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 开始时间 */</span></span><br><span class="line">  time (&amp;startTime);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 摘要块 */</span></span><br><span class="line">  MDInit (&amp;context);</span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; TEST_BLOCK_COUNT; i++)</span><br><span class="line">    MDUpdate (&amp;context, block, TEST_BLOCK_LEN);</span><br><span class="line">  MDFinal (digest, &amp;context);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 结束时间 */</span></span><br><span class="line">  time (&amp;endTime);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span> (<span class="string">" done\n"</span>);</span><br><span class="line">  <span class="built_in">printf</span> (<span class="string">"Digest = "</span>);</span><br><span class="line">  MDPrint (digest);</span><br><span class="line">  <span class="built_in">printf</span> (<span class="string">"\nTime = %ld seconds\n"</span>, (<span class="keyword">long</span>)(endTime-startTime));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span></span><br><span class="line">    (<span class="string">"Speed = %ld bytes/second\n"</span>,</span><br><span class="line">     (<span class="keyword">long</span>)TEST_BLOCK_LEN * (<span class="keyword">long</span>)TEST_BLOCK_COUNT/(endTime-startTime));</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 字符串的消息摘要（测试）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">MDTestSuite</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span> (<span class="string">"MD%d test suite:\n"</span>, MD);</span><br><span class="line"></span><br><span class="line">  MDString (<span class="string">""</span>);</span><br><span class="line">  MDString (<span class="string">"a"</span>);</span><br><span class="line">  MDString (<span class="string">"abc"</span>);</span><br><span class="line">  MDString (<span class="string">"message digest"</span>);</span><br><span class="line">  MDString (<span class="string">"abcdefghijklmnopqrstuvwxyz"</span>);</span><br><span class="line">  MDString</span><br><span class="line">    (<span class="string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"</span>);</span><br><span class="line">  MDString</span><br><span class="line">    (<span class="string">"1234567890123456789012345678901234567890\</span></span><br><span class="line"><span class="string">1234567890123456789012345678901234567890"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 文件的消息摘要。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">MDFile</span> <span class="params">(filename)</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *filename</span>;</span><br><span class="line">&#123;</span><br><span class="line">  FILE *file;</span><br><span class="line">  MD_CTX context;</span><br><span class="line">  <span class="keyword">int</span> len;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">char</span> buffer[<span class="number">1024</span>], digest[<span class="number">16</span>];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> ((file = fopen (filename, <span class="string">"rb"</span>)) == <span class="literal">NULL</span>)</span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">"%s can't be opened\n"</span>, filename);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    MDInit (&amp;context);</span><br><span class="line">    <span class="keyword">while</span> (len = fread (buffer, <span class="number">1</span>, <span class="number">1024</span>, file))</span><br><span class="line">      MDUpdate (&amp;context, buffer, len);</span><br><span class="line">    MDFinal (digest, &amp;context);</span><br><span class="line"></span><br><span class="line">    fclose (file);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">"MD%d (%s) = "</span>, MD, filename);</span><br><span class="line">    MDPrint (digest);</span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">"\n"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 消息摘要输入和结果打印。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">MDFilter</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  MD_CTX context;</span><br><span class="line">  <span class="keyword">int</span> len;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">char</span> buffer[<span class="number">16</span>], digest[<span class="number">16</span>];</span><br><span class="line"></span><br><span class="line">  MDInit (&amp;context);</span><br><span class="line">  <span class="keyword">while</span> (len = fread (buffer, <span class="number">1</span>, <span class="number">16</span>, <span class="built_in">stdin</span>))</span><br><span class="line">    MDUpdate (&amp;context, buffer, len);</span><br><span class="line">  MDFinal (digest, &amp;context);</span><br><span class="line"></span><br><span class="line">  MDPrint (digest);</span><br><span class="line">  <span class="built_in">printf</span> (<span class="string">"\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 十六进制打印消息摘要</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">MDPrint</span> <span class="params">(digest)</span></span></span><br><span class="line">unsigned char digest[16];</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">16</span>; i++)</span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">"%02x"</span>, digest[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="测试样例"><a href="#测试样例" class="headerlink" title="测试样例"></a>测试样例</h3><p> 如下测试是在-x参数下的测试结果</p>
+<p>MD2 测试样例:</p>
+<blockquote>
+<p>MD2 (“”) = 8350e5a3e24c153df2275c9f80692773<br>MD2 (“a”) = 32ec01ec4a6dac72c0ab96fb34c0b5d1<br>MD2 (“abc”) = da853b0d3f88d99b30283a69e6ded6bb<br>MD2 (“message digest”) = ab4f496bfb2a530b219ff33031fe06b0<br>MD2 (“abcdefghijklmnopqrstuvwxyz”) = 4e8ddff3650292ab5a4108c3aa47940b<br>MD2 (“ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789”) =<br>da33def2a42df13975352846c30338cd<br>MD2 (“123456789012345678901234567890123456789012345678901234567890123456<br>78901234567890”) = d5976f79d83d3a0dc9806c3c66f3efd8</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>magbone</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    
+    <a href="https://i.xhi.io/2019/01/29/md/" title="摘要算法">https://i.xhi.io/2019/01/29/md/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/23/ports-details/" rel="next" title="端口对照表">
+                <i class="fa fa-chevron-left"></i> 端口对照表
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/08/minio-wiki/" rel="prev" title="minio使用手册">
+                minio使用手册 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">magbone</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MD2"><span class="nav-number">1.</span> <span class="nav-text">MD2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#摘要-lt-br-gt"><span class="nav-number">1.1.1.</span> <span class="nav-text">摘要 &lt;/br&gt;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#术语和注意事项-lt-br-gt"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">术语和注意事项 &lt;/br&gt;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MD2算法描述"><span class="nav-number">1.1.2.</span> <span class="nav-text">MD2算法描述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步-附上扩展的bytes"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">第一步 附上扩展的bytes</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步-扩展校验码"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">第二步 扩展校验码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步初始化MD缓冲区"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">第三步初始化MD缓冲区</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第四步-创建-16-Byte-块的消息"><span class="nav-number">1.1.2.3.1.</span> <span class="nav-text">第四步 创建 16-Byte 块的消息</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第五步输出"><span class="nav-number">1.1.2.4.</span> <span class="nav-text">第五步输出</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">1.2.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#global-h"><span class="nav-number">1.2.1.</span> <span class="nav-text">global.h</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#md2-h"><span class="nav-number">1.2.2.</span> <span class="nav-text">md2.h</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#md2c-c"><span class="nav-number">1.2.3.</span> <span class="nav-text">md2c.c</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mddriver-c"><span class="nav-number">1.2.4.</span> <span class="nav-text">mddriver.c</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试样例"><span class="nav-number">1.2.5.</span> <span class="nav-text">测试样例</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">magbone</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+</body>
+</html>
